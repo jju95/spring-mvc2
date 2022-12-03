@@ -2,6 +2,7 @@ package hello.springmvc.basic.request;
 
 import hello.springmvc.basic.HelloData;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,18 +14,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 @Slf4j
 @Controller
 public class RequestParamController {
-
 
     @RequestMapping("/request-param-v1")
     public void requestParamV1(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
         int age = Integer.parseInt(request.getParameter("age"));
 
-        log.info("1 username={}, age={}",username,age);
+        log.info("username={}, age={}",username,age);
 
         response.getWriter().write("ok");
     }
@@ -62,7 +63,7 @@ public class RequestParamController {
 
     @ResponseBody
     @RequestMapping("/request-param-required")
-    public String requestParamV5(
+    public String requestParamRequired(
             @RequestParam(required = true) String username,
             @RequestParam(required = false) Integer age){
 
@@ -76,7 +77,7 @@ public class RequestParamController {
     @RequestMapping("/request-param-default")
     public String requestParamDefault(
             @RequestParam(required = true , defaultValue = "guest") String username,
-            @RequestParam(required = false , defaultValue = "-1") Integer age){
+            @RequestParam(required = false , defaultValue = "-1") int age){
 
         log.info("default Value username={}, age={}",username,age);
 
@@ -87,6 +88,7 @@ public class RequestParamController {
     @ResponseBody
     @RequestMapping("/request-param-map")
     public String requestParamMap(@RequestParam Map<String, Object> paramMap){
+        // multiValueMap도 가능하다
 
         log.info("default Value username={}, age={}",paramMap.get("username"), paramMap.get("age"));
 
