@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.springmvc.basic.HelloData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletInputStream;
@@ -50,6 +52,9 @@ public class RequestBodyJsonController {
     @ResponseBody
     @PostMapping("/request-body-json-v3")
     public String requestBodyJsonV3(@RequestBody HelloData helloData) {
+        // @RequestBody 생략 X
+        // @RequestParam 생략시 primitive type 외 나머지는
+        // @ModelAttribute
         log.info("username={} , age={}", helloData.getUsername(), helloData.getAge());
         return "ok";
     }
@@ -66,6 +71,17 @@ public class RequestBodyJsonController {
     @ResponseBody
     @PostMapping("/request-body-json-v5")
     public HelloData requestBodyJsonV5(@RequestBody HelloData data) {
+        // return value가 helloData -> json
+
+        /*
+        * @ResponseBody
+        * json request -> http message converter -> 객체
+        *
+        * @RequestBody
+        * 객체 -> http message converter -> json response
+        * 주의점 request요청시 header값에 Accept를 보고 return값 확인
+        * */
+
         log.info("username={} , age={}", data.getUsername(), data.getAge());
         return data;
     }
